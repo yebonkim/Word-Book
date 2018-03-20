@@ -9,4 +9,5 @@
     <string name="onlyKorean">뜻만</string>
     <string name="onlyEnglish">영어만</string>
     <string name="both">모두</string>
+    <string name="vocaList">단어 리스트</string>
 </resources>
