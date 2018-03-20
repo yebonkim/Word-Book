@@ -15,6 +15,7 @@ import example.com.englishnote.database.DBLiteral;
 import example.com.englishnote.database.DatabaseHelper;
 import example.com.englishnote.model.Vocabulary;
 
+import static example.com.englishnote.database.DBLiteral.TIMESTAMP_COLUMN;
 import static example.com.englishnote.database.DBLiteral.WHERE_ID_EQUALS;
 
 /**
@@ -31,7 +32,7 @@ public class VocabularyDBDAO {
         this.mContext = context;
         dbHelper = DatabaseHelper.getHelper(context);
         tableName = DBLiteral.VOCABULARY_TABLE;
-        columnList = new String[] { DBLiteral.ID_COLUMN,
+        columnList = new String[]{DBLiteral.ID_COLUMN,
                 DBLiteral.ENGLISH_COLUMN,
                 DBLiteral.MEANS_COLUMN,
                 DBLiteral.TIMESTAMP_COLUMN
@@ -40,7 +41,7 @@ public class VocabularyDBDAO {
     }
 
     public void open() throws SQLException {
-        if(dbHelper == null) {
+        if (dbHelper == null) {
             dbHelper = DatabaseHelper.getHelper(mContext);
         }
         database = dbHelper.getWritableDatabase();
@@ -68,8 +69,8 @@ public class VocabularyDBDAO {
 
         try {
             result = database.update(tableName, values,
-                    WHERE_ID_EQUALS, new String[] { String.valueOf(voca.getId()) });
-        }catch(SQLiteConstraintException e) {
+                    WHERE_ID_EQUALS, new String[]{String.valueOf(voca.getId())});
+        } catch (SQLiteConstraintException e) {
             e.printStackTrace();
         }
 
@@ -78,25 +79,34 @@ public class VocabularyDBDAO {
 
     public List<Vocabulary> selectAll() {
         List<Vocabulary> datas = new ArrayList<Vocabulary>();
-        Cursor cursor = database.query(tableName, columnList, null, null, null, null, null);
+        Cursor cursor = database.query(tableName, columnList, null,
+                null, null, null, TIMESTAMP_COLUMN + " DESC");
 
-        if(cursor==null || cursor.getCount()==0)
+        if (cursor == null || cursor.getCount() == 0)
             return datas;
 
         cursor.moveToFirst();
 
-        do{
+        do {
             datas.add(cursorToData(cursor));
-        }while(cursor.moveToNext());
+        } while (cursor.moveToNext());
 
         cursor.close();
 
         return datas;
     }
 
+    public Vocabulary selectById(int id) {
+        Cursor cursor = database.query(tableName, columnList,
+                DBLiteral.WHERE_ID_EQUALS, new String[]{String.valueOf(id)}, null, null, null);
+        cursor.moveToFirst();
+
+        return cursorToData(cursor);
+    }
+
     public Vocabulary cursorToData(Cursor cursor) {
 
-        if(cursor.getCount()==0)
+        if (cursor.getCount() == 0)
             return null;
 
         Vocabulary voca = new Vocabulary();
