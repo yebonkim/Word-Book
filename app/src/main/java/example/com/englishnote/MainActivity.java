@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import example.com.englishnote.database.VocabularyDBDAO;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +30,10 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.testBtn)
     public void onClickTestBtn() {
+        if(new VocabularyDBDAO(this).getCount()<4) {
+            Toast.makeText(this, getString(R.string.limit4Word), Toast.LENGTH_SHORT).show();
+            return;
+        }
         startActivity(new Intent(this, TestActivity.class));
         finish();
     }
