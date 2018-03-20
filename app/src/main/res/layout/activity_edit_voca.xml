@@ -32,7 +32,7 @@
         />
 
     <TextView
-        android:id="@+id/meanTV"
+        android:id="@+id/meansTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/mean"
@@ -45,13 +45,13 @@
         />
 
     <EditText
-        android:id="@+id/meanETV"
+        android:id="@+id/meansETV"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toRightOf="@id/englishTV"
         app:layout_constraintTop_toTopOf="@id/meanTV"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/meanTV"
+        app:layout_constraintBottom_toBottomOf="@id/meansTV"
         android:layout_marginRight="10dp"
         />
 
