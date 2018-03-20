@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">단어장</string>
+    <string name="study">공부하기</string>
+    <string name="test">테스트</string>
+    <string name="register">등록하기</string>
+    <string name="english">영어</string>
+    <string name="mean">뜻</string>
+    <string name="ok">확인</string>
+    <string name="onlyKorean">뜻만</string>
+    <string name="onlyEnglish">영어만</string>
+    <string name="both">모두</string>
+</resources>
