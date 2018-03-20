@@ -43,6 +43,7 @@ public class VocaAdapter extends RecyclerView.Adapter<VocaAdapter.ViewHolder> {
                 view = LayoutInflater.from(context).inflate(R.layout.viewholder_voca, parent, false);
                 return new ViewHolder(view);
         }
+
         return null;
     }
 
@@ -54,6 +55,11 @@ public class VocaAdapter extends RecyclerView.Adapter<VocaAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
         return data.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return VIEW_TYPE_ITEM;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
