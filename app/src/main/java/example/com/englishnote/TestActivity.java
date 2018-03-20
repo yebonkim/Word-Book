@@ -1,14 +1,17 @@
 package example.com.englishnote;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,6 +22,7 @@ import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import example.com.englishnote.common.IntentExtra;
 import example.com.englishnote.database.VocabularyDBDAO;
 import example.com.englishnote.model.Vocabulary;
 
@@ -31,8 +35,8 @@ public class TestActivity extends AppCompatActivity {
     List<Button> meansBtns;
 
     List<Vocabulary> data;
-    List<Integer> wrongVocaIds;
-    List<Integer> answerIdxList;
+    ArrayList<Integer> wrongVocaIds;
+    List<Integer> answerIdList;
     final int ANSWER_CNT_MAX = 4;
     final int TIME_OF_JUDGMENT_SHOWING = 2000;
     int nowQuestions = 0;
@@ -47,7 +51,7 @@ public class TestActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         ActionBarManager.initBackArrowActionbar(this, toolbar, getString(R.string.test));
-        getDataFromDB();
+        getData();
         init();
         mHandler.post(setNewQuestionRunnable);
     }
@@ -55,17 +59,28 @@ public class TestActivity extends AppCompatActivity {
     protected void init() {
         mHandler = new Handler();
         wrongVocaIds = new ArrayList<Integer>();
-        answerIdxList = new ArrayList<Integer>();
+        answerIdList = new ArrayList<Integer>();
+        List<Vocabulary> originalData = db.selectAll();
 
-        for(int i=0; i<data.size(); i++) {
-            answerIdxList.add(i);
+        for(int i=0; i<originalData.size(); i++) {
+            answerIdList.add(originalData.get(i).getId());
         }
     }
 
-    protected void getDataFromDB() {
+    protected void getData() {
+        wrongVocaIds = getIntent().getIntegerArrayListExtra(IntentExtra.VOCA_ID_LIST);
         db = new VocabularyDBDAO(this);
 
-        data = db.selectAll();
+        if(wrongVocaIds == null) {
+
+            data = db.selectAll();
+        } else {
+            data = new ArrayList<>();
+            for(int id : wrongVocaIds) {
+                data.add(db.selectById(id));
+            }
+        }
+
         Collections.shuffle(data);
     }
 
@@ -89,16 +104,17 @@ public class TestActivity extends AppCompatActivity {
             List<String> answers = new ArrayList<>();
 
             answers.add(data.get(nowQuestions).getMeans());
-            Collections.shuffle(answerIdxList);
+            Collections.shuffle(answerIdList);
 
             for(int i=0; i<ANSWER_CNT_MAX-1; i++) {
-                answers.add(data.get(answerIdxList.get(i)).getMeans());
+                answers.add(db.selectById(answerIdList.get(i)).getMeans());
             }
             Collections.shuffle(answers);
 
             for(int i=0; i<ANSWER_CNT_MAX; i++) {
                 meansBtns.get(i).setText(answers.get(i));
             }
+            changeButtonEnable(true);
         }
     };
 
@@ -107,8 +123,42 @@ public class TestActivity extends AppCompatActivity {
         finish();
     }
 
+    protected void goToTestActivityWithWrongWord() {
+        startActivity(new Intent(this, TestActivity.class)
+                .putIntegerArrayListExtra(IntentExtra.VOCA_ID_LIST, wrongVocaIds));
+        finish();;
+    }
+
+    protected void popUpDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.reTestWrongWord))
+                .setTitle(R.string.test)
+                .setCancelable(true)
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        goToTestActivityWithWrongWord();
+                    }
+                })
+                .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        goToMainActivity();
+                    }
+                });
+        builder.show();
+    }
+
+    protected void changeButtonEnable(boolean isEnable) {
+        for(Button btn : meansBtns) {
+            btn.setEnabled(isEnable);
+        }
+    }
+
     @OnClick({R.id.meansBtn1, R.id.meansBtn2, R.id.meansBtn3, R.id.meansBtn4})
     public void onMeansBtnsClicked(Button button) {
+        changeButtonEnable(false);
         if(isCorrect(button.getText().toString())) {
             englishTV.setText(getString(R.string.correct));
         } else {
@@ -116,10 +166,14 @@ public class TestActivity extends AppCompatActivity {
             wrongVocaIds.add(data.get(nowQuestions).getId());
         }
 
-        if(isEnd())
-            //TODO
-            ;
-        else
+        if(isEnd()) {
+            if(wrongVocaIds.size()==0) {
+                Toast.makeText(TestActivity.this, getString(R.string.allClear), Toast.LENGTH_SHORT).show();
+                goToMainActivity();
+            } else {
+                popUpDialog();
+            }
+        } else
             mHandler.postDelayed(setNewQuestionRunnable, TIME_OF_JUDGMENT_SHOWING);
     }
 
