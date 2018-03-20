@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import java.util.List;
 
@@ -18,6 +20,8 @@ import example.com.englishnote.model.Vocabulary;
 
 public class VocaListActivity extends AppCompatActivity {
 
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     @BindView(R.id.vocaRV)
     RecyclerView vocaRV;
 
@@ -29,6 +33,7 @@ public class VocaListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_voca_list);
         ButterKnife.bind(this);
 
+        ActionBarManager.initBackArrowActionbar(this, toolbar, getString(R.string.vocaList));
         setRecyclerView();
     }
 
@@ -43,6 +48,11 @@ public class VocaListActivity extends AppCompatActivity {
         return db.selectAll();
     }
 
+    protected void goToMainActivity() {
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
+    }
+
     @OnClick(R.id.addBtn)
     public void onAddBtnClicked() {
         startActivity(new Intent(this, EditVocaActivity.class)
@@ -51,8 +61,18 @@ public class VocaListActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.home || id == android.R.id.home) {
+            goToMainActivity();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, MainActivity.class));
-        finish();
+        goToMainActivity();
     }
 }

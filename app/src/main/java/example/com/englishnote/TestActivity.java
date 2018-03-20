@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,14 +17,17 @@ import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.BindViews;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import example.com.englishnote.database.VocabularyDBDAO;
 import example.com.englishnote.model.Vocabulary;
 
 public class TestActivity extends AppCompatActivity {
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     @BindView(R.id.englishTV)
     TextView englishTV;
-    @BindViews({R.id.meanBtn1, R.id.meanBtn2, R.id.meanBtn3, R.id.meanBtn4})
+    @BindViews({R.id.meansBtn1, R.id.meansBtn2, R.id.meansBtn3, R.id.meansBtn4})
     List<Button> meansBtns;
 
     List<Vocabulary> data;
@@ -39,7 +44,9 @@ public class TestActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
+        ButterKnife.bind(this);
 
+        ActionBarManager.initBackArrowActionbar(this, toolbar, getString(R.string.test));
         getDataFromDB();
         init();
         mHandler.post(setNewQuestionRunnable);
@@ -95,6 +102,11 @@ public class TestActivity extends AppCompatActivity {
         }
     };
 
+    protected void goToMainActivity() {
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
+    }
+
     @OnClick({R.id.meansBtn1, R.id.meansBtn2, R.id.meansBtn3, R.id.meansBtn4})
     public void onMeansBtnsClicked(Button button) {
         if(isCorrect(button.getText().toString())) {
@@ -112,8 +124,19 @@ public class TestActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.home || id == android.R.id.home) {
+            goToMainActivity();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, MainActivity.class));
-        finish();
+        goToMainActivity();
     }
 }

@@ -3,6 +3,8 @@ package example.com.englishnote;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,6 +21,8 @@ import example.com.englishnote.model.Vocabulary;
 
 public class StudyActivity extends AppCompatActivity {
 
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     @BindView(R.id.englishTV)
     TextView englishTV;
     @BindView(R.id.meansTV)
@@ -39,6 +43,7 @@ public class StudyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_study);
         ButterKnife.bind(this);
 
+        ActionBarManager.initBackArrowActionbar(this, toolbar, getString(R.string.study));
         setStudyTypeStrRes();
         getDataFromDB();
         setQuestion();
@@ -82,6 +87,11 @@ public class StudyActivity extends AppCompatActivity {
         }
     }
 
+    protected void goToMainActivity() {
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
+    }
+
     @OnClick(R.id.preBtn)
     public void onPreBtnClicked() {
         if(nowStudyIdx ==0) {
@@ -117,8 +127,18 @@ public class StudyActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.home || id == android.R.id.home) {
+            goToMainActivity();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, MainActivity.class));
-        finish();
+        goToMainActivity();
     }
 }
