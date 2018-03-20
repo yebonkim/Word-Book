@@ -39,7 +39,7 @@ public class TestActivity extends AppCompatActivity {
     List<Integer> answerIdList;
     final int ANSWER_CNT_MAX = 4;
     final int TIME_OF_JUDGMENT_SHOWING = 2000;
-    int nowQuestions = 0;
+    int nowQuestions = -1;
 
     VocabularyDBDAO db;
     Handler mHandler;
@@ -106,8 +106,11 @@ public class TestActivity extends AppCompatActivity {
             answers.add(data.get(nowQuestions).getMeans());
             Collections.shuffle(answerIdList);
 
-            for(int i=0; i<ANSWER_CNT_MAX-1; i++) {
-                answers.add(db.selectById(answerIdList.get(i)).getMeans());
+            int idx=0;
+            for(int cnt=0; cnt<ANSWER_CNT_MAX-1; cnt++) {
+                if(answerIdList.get(idx) == data.get(nowQuestions).getId())
+                    idx++;
+                answers.add(db.selectById(answerIdList.get(idx++)).getMeans());
             }
             Collections.shuffle(answers);
 
