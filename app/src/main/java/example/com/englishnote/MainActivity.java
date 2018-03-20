@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.registerBtn)
     public void onClickRegisterBtn() {
-        startActivity(new Intent(this, WordListActivity.class));
+        startActivity(new Intent(this, VocaListActivity.class));
         finish();
     }
 

@@ -3,7 +3,7 @@ package example.com.englishnote;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-public class EditWordActivity extends AppCompatActivity {
+public class VocaListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -17,10 +17,10 @@
             </intent-filter>
         </activity>
         
-        <activity android:name=".EditWordActivity"/>
+        <activity android:name=".EditVocaActivity"/>
         <activity android:name=".StudyActivity"/>
         <activity android:name=".TestActivity"/>
-        <activity android:name=".WordListActivity"/>
+        <activity android:name=".VocaListActivity"/>
     </application>
 
 </manifest>
