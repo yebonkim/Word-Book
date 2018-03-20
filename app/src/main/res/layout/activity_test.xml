@@ -46,7 +46,7 @@
         >
 
         <Button
-            android:id="@+id/meanBtn1"
+            android:id="@+id/meansBtn1"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -54,26 +54,26 @@
             />
 
         <Button
-            android:id="@+id/meanBtn2"
+            android:id="@+id/meansBtn2"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/meanBtn1"
+            app:layout_constraintTop_toBottomOf="@id/meansBtn1"
             style="@style/answerBtn"
             />
 
         <Button
-            android:id="@+id/meanBtn3"
+            android:id="@+id/meansBtn3"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/meanBtn2"
+            app:layout_constraintTop_toBottomOf="@id/meansBtn2"
             style="@style/answerBtn"
             />
 
         <Button
-            android:id="@+id/meanBtn4"
+            android:id="@+id/meansBtn4"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/meanBtn3"
+            app:layout_constraintTop_toBottomOf="@id/meansBtn3"
             style="@style/answerBtn"
             />
 
