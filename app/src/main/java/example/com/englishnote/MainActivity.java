@@ -25,6 +25,10 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.studyBtn)
     public void onClickStudyBtn() {
+        if(new VocabularyDBDAO(this).getCount()==0) {
+            Toast.makeText(this, getString(R.string.limit1Word), Toast.LENGTH_SHORT).show();
+            return;
+        }
         startActivity(new Intent(this, StudyActivity.class));
         finish();
     }

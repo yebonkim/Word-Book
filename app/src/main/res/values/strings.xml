@@ -18,6 +18,7 @@
     <string name="correct">맞았습니다.</string>
     <string name="wrong">틀렸습니다.</string>
     <string name="limit4Word">최소 4개의 단어를 등록해주세요.</string>
+    <string name="limit1Word">최소 1개의 단어를 등록해주세요.</string>
     
     <string name="reTestWrongWord">틀린 단어를 다시 푸시겠습니까?</string>
     <string name="yes">예</string>
