@@ -33,7 +33,7 @@ public class VocaListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_voca_list);
         ButterKnife.bind(this);
 
-        ActionBarManager.initBackArrowActionbar(this, toolbar, getString(R.string.vocaList));
+        ActionBarManager.initBackArrowActionbar(this, toolbar, getString(R.string.title_voca_list));
         setRecyclerView();
     }
 

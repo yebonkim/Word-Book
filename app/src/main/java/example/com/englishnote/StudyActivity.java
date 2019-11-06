@@ -43,7 +43,7 @@ public class StudyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_study);
         ButterKnife.bind(this);
 
-        ActionBarManager.initBackArrowActionbar(this, toolbar, getString(R.string.study));
+        ActionBarManager.initBackArrowActionbar(this, toolbar, getString(R.string.action_study));
         setStudyTypeStrRes();
         getDataFromDB();
         setQuestion();

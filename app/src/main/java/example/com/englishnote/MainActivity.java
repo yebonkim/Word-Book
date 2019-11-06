@@ -3,13 +3,8 @@ package example.com.englishnote;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import example.com.englishnote.database.VocabularyDBDAO;
@@ -23,27 +18,27 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick(R.id.studyBtn)
+    @OnClick(R.id.button_study)
     public void onClickStudyBtn() {
         if(new VocabularyDBDAO(this).getCount()==0) {
-            Toast.makeText(this, getString(R.string.limit1Word), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.error_limit_1_word), Toast.LENGTH_SHORT).show();
             return;
         }
         startActivity(new Intent(this, StudyActivity.class));
         finish();
     }
 
-    @OnClick(R.id.testBtn)
+    @OnClick(R.id.button_test)
     public void onClickTestBtn() {
         if(new VocabularyDBDAO(this).getCount()<4) {
-            Toast.makeText(this, getString(R.string.limit4Word), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.error_limit_4_word), Toast.LENGTH_SHORT).show();
             return;
         }
         startActivity(new Intent(this, TestActivity.class));
         finish();
     }
 
-    @OnClick(R.id.registerBtn)
+    @OnClick(R.id.button_register)
     public void onClickRegisterBtn() {
         startActivity(new Intent(this, VocaListActivity.class));
         finish();

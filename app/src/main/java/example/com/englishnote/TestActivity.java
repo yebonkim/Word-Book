@@ -50,7 +50,7 @@ public class TestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_test);
         ButterKnife.bind(this);
 
-        ActionBarManager.initBackArrowActionbar(this, toolbar, getString(R.string.test));
+        ActionBarManager.initBackArrowActionbar(this, toolbar, getString(R.string.action_test));
         getData();
         init();
         mHandler.post(setNewQuestionRunnable);
@@ -135,7 +135,7 @@ public class TestActivity extends AppCompatActivity {
     protected void popUpDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.reTestWrongWord))
-                .setTitle(R.string.test)
+                .setTitle(R.string.action_test)
                 .setCancelable(true)
                 .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override
@@ -163,9 +163,9 @@ public class TestActivity extends AppCompatActivity {
     public void onMeansBtnsClicked(Button button) {
         changeButtonEnable(false);
         if(isCorrect(button.getText().toString())) {
-            englishTV.setText(getString(R.string.correct));
+            englishTV.setText(getString(R.string.msg_correct));
         } else {
-            englishTV.setText(getString(R.string.wrong));
+            englishTV.setText(getString(R.string.msg_wrong));
             wrongVocaIds.add(data.get(nowQuestions).getId());
         }
 
@@ -176,6 +176,7 @@ public class TestActivity extends AppCompatActivity {
             } else {
                 popUpDialog();
             }
+
         } else
             mHandler.postDelayed(setNewQuestionRunnable, TIME_OF_JUDGMENT_SHOWING);
     }

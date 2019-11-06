@@ -1,28 +1,38 @@
 <resources>
     <string name="app_name">단어장</string>
-    <string name="study">공부하기</string>
-    <string name="test">테스트</string>
-    <string name="register">등록하기</string>
-    <string name="vocaList">단어 리스트</string>
-    <string name="addVoca">단어 추가</string>
-    <string name="editVoca">단어 편집</string>
 
-    <string name="english">영어</string>
-    <string name="mean">뜻</string>
+    <!-- MainActivity -->
+    <string name="action_study">공부하기</string>
+    <string name="action_test">테스트</string>
+    <string name="action_register">등록하기</string>
+    <string name="error_limit_4_word">최소 4개의 단어를 등록해주세요.</string>
+    <string name="error_limit_1_word">최소 1개의 단어를 등록해주세요.</string>
+
+    <!-- VocaListActivity -->
+    <string name="title_voca_list">단어 리스트</string>
+
+    <!-- TestActivity -->
+    <string name="msg_correct">맞았습니다.</string>
+    <string name="msg_wrong">틀렸습니다.</string>
+
+    <!-- StudyActivity -->
+
+    <!-- EditVocaActivity -->
+    <string name="title_english">영어</string>
+    <string name="title_mean">뜻</string>
     <string name="ok">확인</string>
     <string name="onlyKorean">뜻만</string>
     <string name="onlyEnglish">영어만</string>
     <string name="both">모두</string>
     <string name="firstQuestionWarning">첫 문제입니다.</string>
     <string name="lastQuestionWarning">마지막 문제입니다.</string>
-    <string name="correct">맞았습니다.</string>
-    <string name="wrong">틀렸습니다.</string>
-    <string name="limit4Word">최소 4개의 단어를 등록해주세요.</string>
-    <string name="limit1Word">최소 1개의 단어를 등록해주세요.</string>
     
     <string name="reTestWrongWord">틀린 단어를 다시 푸시겠습니까?</string>
     <string name="yes">예</string>
     <string name="no">아니오</string>
     <string name="allClear">모두 맞추셨습니다.</string>
+
+    <string name="addVoca">단어 추가</string>
+    <string name="editVoca">단어 편집</string>
 
 </resources>
