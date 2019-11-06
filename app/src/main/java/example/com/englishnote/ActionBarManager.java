@@ -14,6 +14,7 @@ public class ActionBarManager {
 
     public static void initBackArrowActionbar(AppCompatActivity activity, Toolbar toolbar, String title) {
         initDefault(activity, toolbar, title);
+
         MaterialMenuDrawable menuDrawable = new MaterialMenuDrawable(activity, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
         menuDrawable.setIconState(MaterialMenuDrawable.IconState.ARROW);
 

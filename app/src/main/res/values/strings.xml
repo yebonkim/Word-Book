@@ -20,19 +20,21 @@
     <!-- EditVocaActivity -->
     <string name="title_english">영어</string>
     <string name="title_mean">뜻</string>
-    <string name="ok">확인</string>
-    <string name="onlyKorean">뜻만</string>
-    <string name="onlyEnglish">영어만</string>
-    <string name="both">모두</string>
-    <string name="firstQuestionWarning">첫 문제입니다.</string>
-    <string name="lastQuestionWarning">마지막 문제입니다.</string>
-    
-    <string name="reTestWrongWord">틀린 단어를 다시 푸시겠습니까?</string>
-    <string name="yes">예</string>
-    <string name="no">아니오</string>
-    <string name="allClear">모두 맞추셨습니다.</string>
+    <string name="title_only_korean">뜻만</string>
+    <string name="title_only_english">영어만</string>
+    <string name="title_both">모두</string>
 
-    <string name="addVoca">단어 추가</string>
-    <string name="editVoca">단어 편집</string>
+    <string name="action_confirm">확인</string>
+
+    <string name="msg_first_question">첫 문제입니다.</string>
+    <string name="msg_last_question">마지막 문제입니다.</string>
+    
+    <string name="msg_test_again_wrong_voca">틀린 단어를 다시 푸시겠습니까?</string>
+    <string name="action_yes">예</string>
+    <string name="action_no">아니오</string>
+    <string name="msg_all_solved">모두 맞추셨습니다.</string>
+
+    <string name="action_add_voca">단어 추가</string>
+    <string name="action_edit_voca">단어 편집</string>
 
 </resources>

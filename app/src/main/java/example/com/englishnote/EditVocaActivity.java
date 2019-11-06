@@ -1,7 +1,8 @@
 package example.com.englishnote;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -20,14 +21,15 @@ public class EditVocaActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.englishETV)
-    EditText englishETV;
-    @BindView(R.id.meansETV)
-    EditText meansETV;
+    @BindView(R.id.edit_english)
+    EditText englishEdit;
+    @BindView(R.id.edit_means)
+    EditText meansEdit;
 
-    VocabularyDBDAO db;
-    Vocabulary preVoca;
-    boolean isEdit = false;
+    private VocabularyDBDAO mDb;
+
+    private int mVocaId;
+    private boolean mIsNewVoca;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,54 +37,57 @@ public class EditVocaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_voca);
         ButterKnife.bind(this);
 
-        db = new VocabularyDBDAO(this);
-        setData();
-        if(isEdit)
-            ActionBarManager.initBackArrowActionbar(this, toolbar, getString(R.string.editVoca));
-        else
-            ActionBarManager.initBackArrowActionbar(this, toolbar, getString(R.string.addVoca));
+        mVocaId = getIntent().getIntExtra(IntentExtra.VOCA_ID, IntentExtra.VOCA_NULL);
+        mIsNewVoca = (mVocaId == IntentExtra.VOCA_NULL);
+        mDb = new VocabularyDBDAO(this);
+
+        setData(mDb.selectById(mVocaId));
+
+        if (mIsNewVoca) {
+            ActionBarManager.initBackArrowActionbar(this, toolbar, getString(R.string.action_add_voca));
+        } else {
+            ActionBarManager.initBackArrowActionbar(this, toolbar, getString(R.string.action_edit_voca));
+        }
     }
 
-    protected void setData() {
-        int id = getIntent().getIntExtra(IntentExtra.VOCA_ID, -1);
-
-        if(id==-1)
+    protected void setData(@Nullable Vocabulary previousVoca) {
+        if (previousVoca == null) {
             return;
+        }
 
-        isEdit = true;
-
-        preVoca = db.selectById(id);
-
-        englishETV.setText(preVoca.getEnglish());
-        meansETV.setText(preVoca.getMeans());
+        englishEdit.setText(previousVoca.getEnglish());
+        meansEdit.setText(previousVoca.getMeans());
     }
 
+    @NonNull
     protected Vocabulary collectData() {
-        Vocabulary newVoca = new Vocabulary(englishETV.getText().toString(), meansETV.getText().toString(), new Date().getTime());
-        if(isEdit)
-            newVoca.setId(preVoca.getId());
+        Vocabulary newVoca = new Vocabulary(englishEdit.getText().toString(),
+                meansEdit.getText().toString(), new Date().getTime());
+
+        if (!mIsNewVoca) {
+            newVoca.setId(mVocaId);
+        }
 
         return newVoca;
     }
 
-    protected void save() {
-        if(isEdit)
-            db.update(collectData());
-        else
-            db.insert(collectData());
+    private void save() {
+        if(!mIsNewVoca) {
+            mDb.update(collectData());
+        } else {
+            mDb.insert(collectData());
+        }
     }
 
-    @OnClick(R.id.okBtn)
-    public void onOkBtnClicked() {
+    @OnClick(R.id.button_confirm)
+    public void onConfirmBtnClicked() {
         save();
         goToVocaListActivity();
     }
 
-    protected void goToVocaListActivity() {
-        startActivity(new Intent(this, VocaListActivity.class));
+    private void goToVocaListActivity() {
         finish();
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

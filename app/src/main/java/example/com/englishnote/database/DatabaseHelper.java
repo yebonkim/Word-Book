@@ -10,13 +10,13 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static DatabaseHelper instance;
+    private static DatabaseHelper sInstance;
 
     public static synchronized DatabaseHelper getHelper(Context context) {
-        if(instance == null) {
-            instance = new DatabaseHelper(context);
+        if(sInstance == null) {
+            sInstance = new DatabaseHelper(context);
         }
-        return instance;
+        return sInstance;
     }
 
     private DatabaseHelper(Context context) {

@@ -8,7 +8,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,7 +15,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.BindViews;
@@ -29,20 +27,21 @@ import example.com.englishnote.model.Vocabulary;
 public class TestActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.englishTV)
-    TextView englishTV;
-    @BindViews({R.id.meansBtn1, R.id.meansBtn2, R.id.meansBtn3, R.id.meansBtn4})
+    @BindView(R.id.text_english)
+    TextView englishText;
+    @BindViews({R.id.button_means1, R.id.button_means2, R.id.button_means3, R.id.button_means4})
     List<Button> meansBtns;
 
-    List<Vocabulary> data;
-    ArrayList<Integer> wrongVocaIds;
-    List<Integer> answerIdList;
-    final int ANSWER_CNT_MAX = 4;
-    final int TIME_OF_JUDGMENT_SHOWING = 2000;
-    int nowQuestions = -1;
+    private final static int ANSWER_CNT_MAX = 4;
+    private final static int TIME_OF_JUDGMENT_SHOWING = 2000;
 
-    VocabularyDBDAO db;
-    Handler mHandler;
+    private List<Vocabulary> mData;
+    private ArrayList<Integer> mWrongVocaIds;
+    private List<Integer> mAnswerIdList;
+    private int mNowQuestions = -1;
+
+    private VocabularyDBDAO mDb;
+    private Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,97 +52,108 @@ public class TestActivity extends AppCompatActivity {
         ActionBarManager.initBackArrowActionbar(this, toolbar, getString(R.string.action_test));
         getData();
         init();
-        mHandler.post(setNewQuestionRunnable);
+        mHandler.post(mSettingNewQuestionRunnable);
     }
 
-    protected void init() {
+    private void init() {
         mHandler = new Handler();
-        wrongVocaIds = new ArrayList<Integer>();
-        answerIdList = new ArrayList<Integer>();
-        List<Vocabulary> originalData = db.selectAll();
+        mWrongVocaIds = new ArrayList<>();
+        mAnswerIdList = new ArrayList<>();
+        List<Vocabulary> originalData = mDb.selectAll();
 
-        for(int i=0; i<originalData.size(); i++) {
-            answerIdList.add(originalData.get(i).getId());
+        for(int i = 0; i < originalData.size(); i++) {
+            mAnswerIdList.add(originalData.get(i).getId());
         }
     }
 
     protected void getData() {
-        wrongVocaIds = getIntent().getIntegerArrayListExtra(IntentExtra.VOCA_ID_LIST);
-        db = new VocabularyDBDAO(this);
+        mWrongVocaIds = getIntent().getIntegerArrayListExtra(IntentExtra.VOCA_ID_LIST);
+        mDb = new VocabularyDBDAO(this);
+        Vocabulary voca;
 
-        if(wrongVocaIds == null) {
-
-            data = db.selectAll();
+        if (mWrongVocaIds == null) {
+            mData = mDb.selectAll();
         } else {
-            data = new ArrayList<>();
-            for(int id : wrongVocaIds) {
-                data.add(db.selectById(id));
+            mData = new ArrayList<>();
+
+            for (int id : mWrongVocaIds) {
+                voca = mDb.selectById(id);
+
+                if (voca != null) {
+                    mData.add(voca);
+                }
             }
         }
 
-        Collections.shuffle(data);
+        Collections.shuffle(mData);
     }
 
     protected boolean isCorrect(String clickedMeans) {
-        if(data.get(nowQuestions).getMeans().equals(clickedMeans))
+        if (mData.get(mNowQuestions).getMeans().equals(clickedMeans)) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
 
     protected boolean isEnd() {
-        return (nowQuestions==data.size()-1) ? true : false;
+        return (mNowQuestions == mData.size() - 1) ? true : false;
     }
 
-    Runnable setNewQuestionRunnable = new Runnable() {
+    Runnable mSettingNewQuestionRunnable = new Runnable() {
         @Override
         public void run() {
-            nowQuestions++;
-            englishTV.setText(data.get(nowQuestions).getEnglish());
+            mNowQuestions++;
+            englishText.setText(mData.get(mNowQuestions).getEnglish());
 
             List<String> answers = new ArrayList<>();
 
-            answers.add(data.get(nowQuestions).getMeans());
-            Collections.shuffle(answerIdList);
+            answers.add(mData.get(mNowQuestions).getMeans());
+            Collections.shuffle(mAnswerIdList);
 
             int idx=0;
-            for(int cnt=0; cnt<ANSWER_CNT_MAX-1; cnt++) {
-                if(answerIdList.get(idx) == data.get(nowQuestions).getId())
+            Vocabulary voca;
+            for(int cnt = 0 ; cnt < ANSWER_CNT_MAX - 1 ; cnt++) {
+                if (mAnswerIdList.get(idx) == mData.get(mNowQuestions).getId()) {
                     idx++;
-                answers.add(db.selectById(answerIdList.get(idx++)).getMeans());
+                }
+                voca = mDb.selectById(mAnswerIdList.get(idx++));
+
+                if (voca != null) {
+                    answers.add(voca.getMeans());
+                }
             }
             Collections.shuffle(answers);
 
-            for(int i=0; i<ANSWER_CNT_MAX; i++) {
+            for(int i = 0 ; i < ANSWER_CNT_MAX ; i++) {
                 meansBtns.get(i).setText(answers.get(i));
             }
-            changeButtonEnable(true);
+            changeButtonEnables(true);
         }
     };
 
     protected void goToMainActivity() {
-        startActivity(new Intent(this, MainActivity.class));
         finish();
     }
 
     protected void goToTestActivityWithWrongWord() {
         startActivity(new Intent(this, TestActivity.class)
-                .putIntegerArrayListExtra(IntentExtra.VOCA_ID_LIST, wrongVocaIds));
-        finish();;
+                .putIntegerArrayListExtra(IntentExtra.VOCA_ID_LIST, mWrongVocaIds));
+        finish();
     }
 
     protected void popUpDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getString(R.string.reTestWrongWord))
+        builder.setMessage(getString(R.string.msg_test_again_wrong_voca))
                 .setTitle(R.string.action_test)
                 .setCancelable(true)
-                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.action_yes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         goToTestActivityWithWrongWord();
                     }
                 })
-                .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.action_no), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
@@ -153,32 +163,32 @@ public class TestActivity extends AppCompatActivity {
         builder.show();
     }
 
-    protected void changeButtonEnable(boolean isEnable) {
+    protected void changeButtonEnables(boolean isEnable) {
         for(Button btn : meansBtns) {
             btn.setEnabled(isEnable);
         }
     }
 
-    @OnClick({R.id.meansBtn1, R.id.meansBtn2, R.id.meansBtn3, R.id.meansBtn4})
+    @OnClick({R.id.button_means1, R.id.button_means2, R.id.button_means3, R.id.button_means4})
     public void onMeansBtnsClicked(Button button) {
-        changeButtonEnable(false);
+        changeButtonEnables(false);
+
         if(isCorrect(button.getText().toString())) {
-            englishTV.setText(getString(R.string.msg_correct));
+            englishText.setText(getString(R.string.msg_correct));
         } else {
-            englishTV.setText(getString(R.string.msg_wrong));
-            wrongVocaIds.add(data.get(nowQuestions).getId());
+            englishText.setText(getString(R.string.msg_wrong));
+            mWrongVocaIds.add(mData.get(mNowQuestions).getId());
         }
 
         if(isEnd()) {
-            if(wrongVocaIds.size()==0) {
-                Toast.makeText(TestActivity.this, getString(R.string.allClear), Toast.LENGTH_SHORT).show();
+            if (mWrongVocaIds.size() == 0) {
+                Toast.makeText(TestActivity.this, getString(R.string.msg_all_solved), Toast.LENGTH_SHORT).show();
                 goToMainActivity();
             } else {
                 popUpDialog();
             }
-
         } else
-            mHandler.postDelayed(setNewQuestionRunnable, TIME_OF_JUDGMENT_SHOWING);
+            mHandler.postDelayed(mSettingNewQuestionRunnable, TIME_OF_JUDGMENT_SHOWING);
     }
 
     @Override

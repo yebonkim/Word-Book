@@ -16,6 +16,8 @@ public class DBLiteral {
 
     public static final String WHERE_ID_EQUALS = ID_COLUMN + " =?";
 
+    public static final String ORDER_BY_DESC = " DESC";
+
     public static final String CREATE_VOCABULARY_TABLE = "CREATE TABLE IF NOT EXISTS "+
             VOCABULARY_TABLE + "(" + ID_COLUMN + " INTEGER PRIMARY KEY," +
             ENGLISH_COLUMN + " TEXT UNIQUE, " +

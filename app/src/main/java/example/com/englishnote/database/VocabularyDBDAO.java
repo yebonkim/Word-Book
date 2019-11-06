@@ -6,33 +6,33 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-import example.com.englishnote.database.DBLiteral;
-import example.com.englishnote.database.DatabaseHelper;
 import example.com.englishnote.model.Vocabulary;
-
-import static example.com.englishnote.database.DBLiteral.TIMESTAMP_COLUMN;
-import static example.com.englishnote.database.DBLiteral.WHERE_ID_EQUALS;
 
 /**
  * Created by KimYebon on 16. 6. 16..
  */
 public class VocabularyDBDAO {
-    protected SQLiteDatabase database;
-    private DatabaseHelper dbHelper;
+
+    private final static String TABLE_NAME = DBLiteral.VOCABULARY_TABLE;
+
+    private SQLiteDatabase mDatabase;
+    private DatabaseHelper mDbHelper;
+
     private Context mContext;
-    private String tableName;
-    private String[] columnList;
+
+    private String[] mColumnList;
 
     public VocabularyDBDAO(Context context) {
         this.mContext = context;
-        dbHelper = DatabaseHelper.getHelper(context);
-        tableName = DBLiteral.VOCABULARY_TABLE;
-        columnList = new String[]{DBLiteral.ID_COLUMN,
+        mDbHelper = DatabaseHelper.getHelper(context);
+        mColumnList = new String[]{DBLiteral.ID_COLUMN,
                 DBLiteral.ENGLISH_COLUMN,
                 DBLiteral.MEANS_COLUMN,
                 DBLiteral.TIMESTAMP_COLUMN
@@ -41,13 +41,14 @@ public class VocabularyDBDAO {
     }
 
     public void open() throws SQLException {
-        if (dbHelper == null) {
-            dbHelper = DatabaseHelper.getHelper(mContext);
+        if (mDbHelper == null) {
+            mDbHelper = DatabaseHelper.getHelper(mContext);
         }
-        database = dbHelper.getWritableDatabase();
+        mDatabase = mDbHelper.getWritableDatabase();
     }
 
-    protected ContentValues makeContentValues(Vocabulary voca) {
+    @NonNull
+    protected ContentValues makeContentValues(@NonNull Vocabulary voca) {
         ContentValues values = new ContentValues();
 
         values.put(DBLiteral.ENGLISH_COLUMN, voca.getEnglish());
@@ -57,19 +58,19 @@ public class VocabularyDBDAO {
         return values;
     }
 
-    public long insert(Vocabulary voca) {
+    public long insert(@NonNull Vocabulary voca) {
         ContentValues values = makeContentValues(voca);
 
-        return database.insert(tableName, null, values);
+        return mDatabase.insert(TABLE_NAME, null, values);
     }
 
-    public long update(Vocabulary voca) {
+    public long update(@NonNull Vocabulary voca) {
         ContentValues values = makeContentValues(voca);
         long result = 0;
 
         try {
-            result = database.update(tableName, values,
-                    WHERE_ID_EQUALS, new String[]{String.valueOf(voca.getId())});
+            result = mDatabase.update(TABLE_NAME, values, DBLiteral.WHERE_ID_EQUALS,
+                    new String[]{String.valueOf(voca.getId())});
         } catch (SQLiteConstraintException e) {
             e.printStackTrace();
         }
@@ -77,15 +78,20 @@ public class VocabularyDBDAO {
         return result;
     }
 
+    @NonNull
     public List<Vocabulary> selectAll() {
         List<Vocabulary> datas = new ArrayList<Vocabulary>();
-        Cursor cursor = database.query(tableName, columnList, null,
-                null, null, null, TIMESTAMP_COLUMN + " DESC");
+        Cursor cursor = mDatabase.query(TABLE_NAME, mColumnList, null, null,
+                null, null,
+                DBLiteral.TIMESTAMP_COLUMN + DBLiteral.ORDER_BY_DESC);
 
-        if (cursor == null || cursor.getCount() == 0)
+        if (cursor == null) {
             return datas;
+        }
 
-        cursor.moveToFirst();
+        if (cursor.moveToFirst() == false) {
+            return datas;
+        }
 
         do {
             datas.add(cursorToData(cursor));
@@ -96,20 +102,25 @@ public class VocabularyDBDAO {
         return datas;
     }
 
+    @Nullable
     public Vocabulary selectById(int id) {
-        Cursor cursor = database.query(tableName, columnList,
+        Cursor cursor = mDatabase.query(TABLE_NAME, mColumnList,
                 DBLiteral.WHERE_ID_EQUALS, new String[]{String.valueOf(id)}, null, null, null);
-        cursor.moveToFirst();
+
+        if (cursor.moveToFirst() == false) {
+            return null;
+        }
 
         return cursorToData(cursor);
     }
 
-    public Vocabulary cursorToData(Cursor cursor) {
-
+    @NonNull
+    public Vocabulary cursorToData(@NonNull Cursor cursor) {
         if (cursor.getCount() == 0)
             return null;
 
         Vocabulary voca = new Vocabulary();
+
         voca.setId(cursor.getInt(0));
         voca.setEnglish(cursor.getString(1));
         voca.setMeans(cursor.getString(2));
@@ -119,6 +130,6 @@ public class VocabularyDBDAO {
     }
 
     public int getCount() {
-        return dbHelper.getCount(tableName);
+        return mDbHelper.getCount(TABLE_NAME);
     }
 }

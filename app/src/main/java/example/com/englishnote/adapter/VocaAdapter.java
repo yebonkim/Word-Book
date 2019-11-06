@@ -1,13 +1,11 @@
 package example.com.englishnote.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.List;
@@ -25,19 +23,19 @@ import example.com.englishnote.model.Vocabulary;
 
 public class VocaAdapter extends RecyclerView.Adapter<VocaAdapter.ViewHolder> {
 
-    List<Vocabulary> data;
-    public static final int VIEW_TYPE_ITEM = 1;
-    static Activity activity;
+    private static final int VIEW_TYPE_ITEM = 1;
 
-    public VocaAdapter(Activity activity, List<Vocabulary> data) {
-        this.data = data;
-        this.activity = activity;
+    private List<Vocabulary> mData;
+
+    public VocaAdapter(List<Vocabulary> data) {
+        this.mData = data;
     }
 
     @Override
     public VocaAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         View view;
+
         switch (viewType) {
             case VIEW_TYPE_ITEM:
                 view = LayoutInflater.from(context).inflate(R.layout.viewholder_voca, parent, false);
@@ -49,12 +47,12 @@ public class VocaAdapter extends RecyclerView.Adapter<VocaAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(VocaAdapter.ViewHolder holder, int position) {
-        holder.setData(data.get(position));
+        holder.setData(mData.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return mData.size();
     }
 
     @Override
@@ -63,29 +61,31 @@ public class VocaAdapter extends RecyclerView.Adapter<VocaAdapter.ViewHolder> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.englishTV)
-        TextView englishTV;
-        @BindView(R.id.meansTV)
-        TextView meansTV;
+        @BindView(R.id.text_english)
+        TextView englishText;
+        @BindView(R.id.text_means)
+        TextView meansText;
 
-        View view;
+        private View mView;
+        private Context mContext;
 
         public ViewHolder(View view) {
             super(view);
-            this.view = view;
+            this.mView = view;
+            this.mContext = view.getContext();
+
             ButterKnife.bind(this, view);
         }
 
         protected void setData(final Vocabulary voca) {
-            englishTV.setText(voca.getEnglish());
-            meansTV.setText(voca.getMeans());
+            englishText.setText(voca.getEnglish());
+            meansText.setText(voca.getMeans());
 
-            view.setOnClickListener(new View.OnClickListener() {
+            mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    activity.startActivity(new Intent(activity, EditVocaActivity.class)
+                    mContext.startActivity(new Intent(mContext, EditVocaActivity.class)
                             .putExtra(IntentExtra.VOCA_ID, voca.getId()));
-                    activity.finish();
                 }
             });
         }

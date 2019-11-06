@@ -20,28 +20,25 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.button_study)
     public void onClickStudyBtn() {
-        if(new VocabularyDBDAO(this).getCount()==0) {
+        if (new VocabularyDBDAO(this).getCount() == 0) {
             Toast.makeText(this, getString(R.string.error_limit_1_word), Toast.LENGTH_SHORT).show();
             return;
         }
         startActivity(new Intent(this, StudyActivity.class));
-        finish();
     }
 
     @OnClick(R.id.button_test)
     public void onClickTestBtn() {
-        if(new VocabularyDBDAO(this).getCount()<4) {
+        if (new VocabularyDBDAO(this).getCount() < 4) {
             Toast.makeText(this, getString(R.string.error_limit_4_word), Toast.LENGTH_SHORT).show();
             return;
         }
         startActivity(new Intent(this, TestActivity.class));
-        finish();
     }
 
     @OnClick(R.id.button_register)
     public void onClickRegisterBtn() {
         startActivity(new Intent(this, VocaListActivity.class));
-        finish();
     }
 
     @Override

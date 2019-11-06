@@ -1,21 +1,19 @@
 package example.com.englishnote.model;
 
-import java.util.Date;
-
 /**
  * Created by yebonkim on 2018. 3. 20..
  */
 
 public class Vocabulary {
-    int id;
-    String english;
-    String means;
-    long timestamp;
+    private int mId;
+    private String mEnglish;
+    private String mMeans;
+    private long mTimestamp;
 
     public Vocabulary(String english, String means, long timestamp) {
-        this.english = english;
-        this.means = means;
-        this.timestamp = timestamp;
+        this.mEnglish = english;
+        this.mMeans = means;
+        this.mTimestamp = timestamp;
     }
 
     public Vocabulary() {
@@ -23,34 +21,34 @@ public class Vocabulary {
     }
 
     public String getEnglish() {
-        return english;
+        return mEnglish;
     }
 
     public void setEnglish(String english) {
-        this.english = english;
+        this.mEnglish = english;
     }
 
     public String getMeans() {
-        return means;
+        return mMeans;
     }
 
     public void setMeans(String means) {
-        this.means = means;
+        this.mMeans = means;
     }
 
     public long getTimestamp() {
-        return timestamp;
+        return mTimestamp;
     }
 
     public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
+        this.mTimestamp = timestamp;
     }
 
     public int getId() {
-        return id;
+        return mId;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.mId = id;
     }
 }

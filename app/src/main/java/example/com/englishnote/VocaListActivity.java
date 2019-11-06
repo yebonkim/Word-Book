@@ -22,10 +22,10 @@ public class VocaListActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.vocaRV)
-    RecyclerView vocaRV;
+    @BindView(R.id.list_voca)
+    RecyclerView vocaList;
 
-    VocaAdapter adapter;
+    private VocaAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,27 +37,25 @@ public class VocaListActivity extends AppCompatActivity {
         setRecyclerView();
     }
 
-    protected void setRecyclerView() {
-        vocaRV.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new VocaAdapter(this, getDataFromServer());
-        vocaRV.setAdapter(adapter);
+    private void setRecyclerView() {
+        vocaList.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter = new VocaAdapter(getDataFromDb());
+        vocaList.setAdapter(mAdapter);
     }
 
-    protected List<Vocabulary> getDataFromServer() {
+    protected List<Vocabulary> getDataFromDb() {
         VocabularyDBDAO db = new VocabularyDBDAO(this);
         return db.selectAll();
     }
 
-    protected void goToMainActivity() {
-        startActivity(new Intent(this, MainActivity.class));
+    private void goToMainActivity() {
         finish();
     }
 
-    @OnClick(R.id.addBtn)
+    @OnClick(R.id.button_add)
     public void onAddBtnClicked() {
         startActivity(new Intent(this, EditVocaActivity.class)
                 .putExtra(IntentExtra.VOCA_ID, IntentExtra.VOCA_NULL));
-        finish();
     }
 
     @Override

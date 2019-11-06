@@ -1,6 +1,5 @@
 package example.com.englishnote;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -23,19 +22,20 @@ public class StudyActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.englishTV)
-    TextView englishTV;
-    @BindView(R.id.meansTV)
-    TextView meansTV;
-    @BindView(R.id.visibilityBtn)
+    @BindView(R.id.text_english)
+    TextView englishText;
+    @BindView(R.id.text_means)
+    TextView meansText;
+    @BindView(R.id.button_visibility)
     Button visibilityBtn;
 
-    VocabularyDBDAO db;
+    private VocabularyDBDAO mDb;
 
-    int[] studyType;
-    int nowStudyTypeIdx = 0;
-    int nowStudyIdx = 0;
-    List<Vocabulary> data;
+    private final static int[] STUDY_TYPE = {R.string.title_both, R.string.title_only_english, R.string.title_only_korean};
+    private List<Vocabulary> mDatas;
+
+    private int mNowStudyTypeIdx = 0;
+    private int mNowStudyIdx = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,86 +44,77 @@ public class StudyActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         ActionBarManager.initBackArrowActionbar(this, toolbar, getString(R.string.action_study));
-        setStudyTypeStrRes();
         getDataFromDB();
         setQuestion();
     }
 
-    protected void setStudyTypeStrRes() {
-        studyType = new int[3];
-        studyType[0] = R.string.both;
-        studyType[1] = R.string.onlyEnglish;
-        studyType[2] = R.string.onlyKorean;
-    }
-
     protected void getDataFromDB() {
-        db = new VocabularyDBDAO(this);
-        data = db.selectAll();
-        Collections.shuffle(data);
+        mDb = new VocabularyDBDAO(this);
+        mDatas = mDb.selectAll();
+        Collections.shuffle(mDatas);
     }
 
     protected void setNowStudyTypeText() {
-        visibilityBtn.setText(studyType[nowStudyTypeIdx]);
+        visibilityBtn.setText(STUDY_TYPE[mNowStudyTypeIdx]);
     }
 
     protected void setQuestion() {
-        englishTV.setText(data.get(nowStudyIdx).getEnglish());
-        meansTV.setText(data.get(nowStudyIdx).getMeans());
+        englishText.setText(mDatas.get(mNowStudyIdx).getEnglish());
+        meansText.setText(mDatas.get(mNowStudyIdx).getMeans());
     }
 
-    protected void setTVsVisibility() {
-        englishTV.setVisibility(View.VISIBLE);
-        meansTV.setVisibility(View.VISIBLE);
+    protected void setTextsVisibility() {
+        englishText.setVisibility(View.VISIBLE);
+        meansText.setVisibility(View.VISIBLE);
 
-        switch(studyType[nowStudyTypeIdx]) {
-            case R.string.both:
+        switch (STUDY_TYPE[mNowStudyTypeIdx]) {
+            case R.string.title_both:
                 break;
-            case R.string.onlyEnglish:
-                meansTV.setVisibility(View.INVISIBLE);
+            case R.string.title_only_english:
+                meansText.setVisibility(View.INVISIBLE);
                 break;
-            case R.string.onlyKorean:
-                englishTV.setVisibility(View.INVISIBLE);
+            case R.string.title_only_korean:
+                englishText.setVisibility(View.INVISIBLE);
                 break;
         }
     }
 
     protected void goToMainActivity() {
-        startActivity(new Intent(this, MainActivity.class));
         finish();
     }
 
-    @OnClick(R.id.preBtn)
-    public void onPreBtnClicked() {
-        if(nowStudyIdx ==0) {
-            Toast.makeText(this, getString(R.string.firstQuestionWarning), Toast.LENGTH_SHORT).show();
+    @OnClick(R.id.button_previous)
+    public void onPreviousBtnClicked() {
+        if (mNowStudyIdx == 0) {
+            Toast.makeText(this, getString(R.string.msg_first_question), Toast.LENGTH_SHORT).show();
             return;
         }
 
-        nowStudyIdx--;
+        mNowStudyIdx--;
         setQuestion();
     }
 
-    @OnClick(R.id.nextBtn)
+    @OnClick(R.id.button_next)
     public void onNextBtnClicked() {
-        if(nowStudyIdx ==data.size()-1) {
-            Toast.makeText(this, getString(R.string.lastQuestionWarning), Toast.LENGTH_SHORT).show();
+        if (mNowStudyIdx == mDatas.size() - 1) {
+            Toast.makeText(this, getString(R.string.msg_last_question), Toast.LENGTH_SHORT).show();
             return;
         }
 
-        nowStudyIdx++;
+        mNowStudyIdx++;
         setQuestion();
-
     }
 
-    @OnClick(R.id.visibilityBtn)
+    @OnClick(R.id.button_visibility)
     public void onVisibilityBtnClicked() {
-        if(nowStudyTypeIdx==studyType.length-1)
-            nowStudyTypeIdx = 0;
-        else
-            nowStudyTypeIdx++;
+        if (mNowStudyTypeIdx == STUDY_TYPE.length - 1) {
+            mNowStudyTypeIdx = 0;
+        } else {
+            mNowStudyTypeIdx++;
+        }
 
         setNowStudyTypeText();
-        setTVsVisibility();
+        setTextsVisibility();
     }
 
     @Override
