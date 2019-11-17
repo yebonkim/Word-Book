@@ -1,9 +1,10 @@
 ### WordBook
 
-#### master Branch - Room DB 사용
-#### sqlite Branch - Sqlite 사용
+| <center> master Branch </center> | <center> sqlite Branch </center> |
+| -------------------------------- | -------------------------------- |
+| <center> Room DB </center>       | <center> Sqlite 사용 </center>    |
 
-간단하게 나만의 단어장을 만들 수 있는 안드로이드 어플입니다!
+### 간단하게 나만의 단어장을 만들 수 있는 안드로이드 어플입니다!
 
 #### 원하는 단어와 뜻을 추가하여
 
@@ -31,4 +32,4 @@
   <img src="./images/screenshot_6.png" width = "40%" >
 </p>
 
-어플입니다.🤗
+### 어플입니다.🤗
