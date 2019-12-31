@@ -1,54 +1,63 @@
 package example.com.englishnote.model;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 /**
  * Created by yebonkim on 2018. 3. 20..
  */
 
+@Entity
 public class Vocabulary {
-    private int mId;
-    private String mEnglish;
-    private String mMeans;
-    private long mTimestamp;
+    @PrimaryKey
+    private int id;
+    @ColumnInfo
+    private String english;
+    @ColumnInfo
+    private String means;
+    @ColumnInfo
+    private long timestamp;
 
     public Vocabulary(String english, String means, long timestamp) {
-        this.mEnglish = english;
-        this.mMeans = means;
-        this.mTimestamp = timestamp;
+        this.english = english;
+        this.means = means;
+        this.timestamp = timestamp;
     }
 
     public Vocabulary() {
 
     }
 
-    public String getEnglish() {
-        return mEnglish;
-    }
-
-    public void setEnglish(String english) {
-        this.mEnglish = english;
-    }
-
-    public String getMeans() {
-        return mMeans;
-    }
-
-    public void setMeans(String means) {
-        this.mMeans = means;
-    }
-
-    public long getTimestamp() {
-        return mTimestamp;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.mTimestamp = timestamp;
-    }
-
     public int getId() {
-        return mId;
+        return id;
     }
 
     public void setId(int id) {
-        this.mId = id;
+        this.id = id;
+    }
+
+    public String getEnglish() {
+        return english;
+    }
+
+    public void setEnglish(String english) {
+        this.english = english;
+    }
+
+    public String getMeans() {
+        return means;
+    }
+
+    public void setMeans(String means) {
+        this.means = means;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 }
