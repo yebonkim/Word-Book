@@ -37,4 +37,6 @@
     <string name="action_add_voca">단어 추가</string>
     <string name="action_edit_voca">단어 편집</string>
 
+    <string name="err_voca_add_or_edit_fail">단어 추가(편집)에 실패했어요.😢</string>
+
 </resources>
