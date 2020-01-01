@@ -8,7 +8,6 @@ import androidx.room.Update;
 import java.util.List;
 
 import example.com.englishnote.model.Vocabulary;
-import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 

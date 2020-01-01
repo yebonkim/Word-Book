@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import java.util.List;
 
@@ -16,14 +18,22 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import example.com.englishnote.adapter.VocaAdapter;
 import example.com.englishnote.common.IntentExtra;
+import example.com.englishnote.database.AppDatabase;
 import example.com.englishnote.model.Vocabulary;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class VocaListActivity extends AppCompatActivity {
-
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.list_voca)
     RecyclerView vocaList;
+
+    private AppDatabase mDb;
+    private Observable<List<Vocabulary>> mVocaListObservable;
+    private Disposable mVocaListDisposable;
 
     private VocaAdapter mAdapter;
 
@@ -34,17 +44,26 @@ public class VocaListActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         ActionBarManager.initBackArrowActionbar(this, toolbar, getString(R.string.title_voca_list));
-//        setRecyclerView();
+        mDb = Room.databaseBuilder(getApplicationContext(), AppDatabase.class,
+                AppDatabase.DATABASE_NAME).build();
     }
 
-    private void setRecyclerView() {
+    @Override
+    protected void onStart() {
+        super.onStart();
+        observeVocaList();
+    }
+
+    private void setRecyclerView(@NonNull List<Vocabulary> data) {
         vocaList.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new VocaAdapter(getDataFromDb());
+        mAdapter = new VocaAdapter(data);
         vocaList.setAdapter(mAdapter);
     }
 
-    protected List<Vocabulary> getDataFromDb() {
-        return null;
+    protected void observeVocaList() {
+        mVocaListDisposable = mDb.vocaDao().selectAll().observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(vocaList -> setRecyclerView(vocaList));
     }
 
     private void goToMainActivity() {
@@ -55,6 +74,12 @@ public class VocaListActivity extends AppCompatActivity {
     public void onAddBtnClicked() {
         startActivity(new Intent(this, EditVocaActivity.class)
                 .putExtra(IntentExtra.VOCA_ID, IntentExtra.VOCA_NULL));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mVocaListDisposable.dispose();
     }
 
     @Override

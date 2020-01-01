@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.room.Room;
 
 import java.util.Collections;
 import java.util.List;
@@ -16,9 +17,14 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import example.com.englishnote.database.AppDatabase;
 import example.com.englishnote.model.Vocabulary;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class StudyActivity extends AppCompatActivity {
+    private final static int[] STUDY_TYPE = {R.string.title_both, R.string.title_only_english, R.string.title_only_korean};
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -29,7 +35,9 @@ public class StudyActivity extends AppCompatActivity {
     @BindView(R.id.button_visibility)
     Button visibilityBtn;
 
-    private final static int[] STUDY_TYPE = {R.string.title_both, R.string.title_only_english, R.string.title_only_korean};
+    private AppDatabase mDb;
+    private Disposable mVocaListDisposable;
+
     private List<Vocabulary> mDatas;
 
     private int mNowStudyTypeIdx = 0;
@@ -42,14 +50,47 @@ public class StudyActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         ActionBarManager.initBackArrowActionbar(this, toolbar, getString(R.string.action_study));
-        getDataFromDB();
+
+        mDb = Room.databaseBuilder(getApplicationContext(), AppDatabase.class,
+                AppDatabase.DATABASE_NAME).build();
+        mVocaListDisposable = mDb.vocaDao().selectAll().observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(vocaList -> {
+                    mDatas = vocaList;
+                    Collections.shuffle(mDatas);
+                    setQuestion();
+                });
+    }
+
+    @OnClick(R.id.button_previous)
+    public void onPreviousBtnClicked() {
+        if (mNowStudyIdx == 0) {
+            Toast.makeText(this,
+                    getString(R.string.msg_first_question), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        mNowStudyIdx--;
         setQuestion();
     }
 
-    protected void getDataFromDB() {
-//        mDb = new VocabularyDBDAO(this);
-//        mDatas = mDb.selectAll();
-//        Collections.shuffle(mDatas);
+    @OnClick(R.id.button_next)
+    public void onNextBtnClicked() {
+        if (mNowStudyIdx == mDatas.size() - 1) {
+            Toast.makeText(this, getString(R.string.msg_last_question), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        mNowStudyIdx++;
+        setQuestion();
+    }
+
+    @OnClick(R.id.button_visibility)
+    public void onVisibilityBtnClicked() {
+        mNowStudyTypeIdx = (mNowStudyTypeIdx + 1) % STUDY_TYPE.length;
+
+        setNowStudyTypeText();
+        setTextsVisibility();
     }
 
     protected void setNowStudyTypeText() {
@@ -57,8 +98,12 @@ public class StudyActivity extends AppCompatActivity {
     }
 
     protected void setQuestion() {
-//        englishText.setText(mDatas.get(mNowStudyIdx).getEnglish());
-//        meansText.setText(mDatas.get(mNowStudyIdx).getMeans());
+        if (mDatas == null) {
+            return;
+        }
+
+        englishText.setText(mDatas.get(mNowStudyIdx).getEnglish());
+        meansText.setText(mDatas.get(mNowStudyIdx).getMeans());
     }
 
     protected void setTextsVisibility() {
@@ -81,38 +126,10 @@ public class StudyActivity extends AppCompatActivity {
         finish();
     }
 
-    @OnClick(R.id.button_previous)
-    public void onPreviousBtnClicked() {
-        if (mNowStudyIdx == 0) {
-            Toast.makeText(this, getString(R.string.msg_first_question), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        mNowStudyIdx--;
-        setQuestion();
-    }
-
-    @OnClick(R.id.button_next)
-    public void onNextBtnClicked() {
-        if (mNowStudyIdx == mDatas.size() - 1) {
-            Toast.makeText(this, getString(R.string.msg_last_question), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        mNowStudyIdx++;
-        setQuestion();
-    }
-
-    @OnClick(R.id.button_visibility)
-    public void onVisibilityBtnClicked() {
-        if (mNowStudyTypeIdx == STUDY_TYPE.length - 1) {
-            mNowStudyTypeIdx = 0;
-        } else {
-            mNowStudyTypeIdx++;
-        }
-
-        setNowStudyTypeText();
-        setTextsVisibility();
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mVocaListDisposable.dispose();
     }
 
     @Override

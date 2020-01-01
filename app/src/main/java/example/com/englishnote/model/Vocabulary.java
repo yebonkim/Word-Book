@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey;
 
 @Entity
 public class Vocabulary {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
     @ColumnInfo
     private String english;
