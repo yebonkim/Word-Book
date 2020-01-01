@@ -15,7 +15,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import example.com.englishnote.common.IntentExtra;
-import example.com.englishnote.database.VocabularyDBDAO;
 import example.com.englishnote.model.Vocabulary;
 
 public class EditVocaActivity extends AppCompatActivity {
@@ -26,8 +25,6 @@ public class EditVocaActivity extends AppCompatActivity {
     EditText englishEdit;
     @BindView(R.id.edit_means)
     EditText meansEdit;
-
-    private VocabularyDBDAO mDb;
 
     private int mVocaId;
     private boolean mIsNewVoca;
@@ -40,9 +37,8 @@ public class EditVocaActivity extends AppCompatActivity {
 
         mVocaId = getIntent().getIntExtra(IntentExtra.VOCA_ID, IntentExtra.VOCA_NULL);
         mIsNewVoca = (mVocaId == IntentExtra.VOCA_NULL);
-        mDb = new VocabularyDBDAO(this);
 
-        setData(mDb.selectById(mVocaId));
+//        setData(mDb.selectById(mVocaId));
 
         if (mIsNewVoca) {
             ActionBarManager.initBackArrowActionbar(this, toolbar, getString(R.string.action_add_voca));
@@ -74,9 +70,9 @@ public class EditVocaActivity extends AppCompatActivity {
 
     private void save() {
         if(!mIsNewVoca) {
-            mDb.update(collectData());
+//            mDb.update(collectData());
         } else {
-            mDb.insert(collectData());
+//            mDb.insert(collectData());
         }
     }
 

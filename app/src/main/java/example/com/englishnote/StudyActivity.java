@@ -16,7 +16,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import example.com.englishnote.database.VocabularyDBDAO;
 import example.com.englishnote.model.Vocabulary;
 
 public class StudyActivity extends AppCompatActivity {
@@ -29,8 +28,6 @@ public class StudyActivity extends AppCompatActivity {
     TextView meansText;
     @BindView(R.id.button_visibility)
     Button visibilityBtn;
-
-    private VocabularyDBDAO mDb;
 
     private final static int[] STUDY_TYPE = {R.string.title_both, R.string.title_only_english, R.string.title_only_korean};
     private List<Vocabulary> mDatas;
@@ -50,9 +47,9 @@ public class StudyActivity extends AppCompatActivity {
     }
 
     protected void getDataFromDB() {
-        mDb = new VocabularyDBDAO(this);
-        mDatas = mDb.selectAll();
-        Collections.shuffle(mDatas);
+//        mDb = new VocabularyDBDAO(this);
+//        mDatas = mDb.selectAll();
+//        Collections.shuffle(mDatas);
     }
 
     protected void setNowStudyTypeText() {
@@ -60,8 +57,8 @@ public class StudyActivity extends AppCompatActivity {
     }
 
     protected void setQuestion() {
-        englishText.setText(mDatas.get(mNowStudyIdx).getEnglish());
-        meansText.setText(mDatas.get(mNowStudyIdx).getMeans());
+//        englishText.setText(mDatas.get(mNowStudyIdx).getEnglish());
+//        meansText.setText(mDatas.get(mNowStudyIdx).getMeans());
     }
 
     protected void setTextsVisibility() {

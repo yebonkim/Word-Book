@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import example.com.englishnote.database.VocabularyDBDAO;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,20 +20,20 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.button_study)
     public void onClickStudyBtn() {
-        if (new VocabularyDBDAO(this).getCount() == 0) {
-            Toast.makeText(this, getString(R.string.error_limit_1_word), Toast.LENGTH_SHORT).show();
-            return;
-        }
-        startActivity(new Intent(this, StudyActivity.class));
+//        if (new VocabularyDBDAO(this).getCount() == 0) {
+//            Toast.makeText(this, getString(R.string.error_limit_1_word), Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        startActivity(new Intent(this, StudyActivity.class));
     }
 
     @OnClick(R.id.button_test)
     public void onClickTestBtn() {
-        if (new VocabularyDBDAO(this).getCount() < 4) {
-            Toast.makeText(this, getString(R.string.error_limit_4_word), Toast.LENGTH_SHORT).show();
-            return;
-        }
-        startActivity(new Intent(this, TestActivity.class));
+//        if (new VocabularyDBDAO(this).getCount() < 4) {
+//            Toast.makeText(this, getString(R.string.error_limit_4_word), Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        startActivity(new Intent(this, TestActivity.class));
     }
 
     @OnClick(R.id.button_register)

@@ -16,7 +16,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import example.com.englishnote.adapter.VocaAdapter;
 import example.com.englishnote.common.IntentExtra;
-import example.com.englishnote.database.VocabularyDBDAO;
 import example.com.englishnote.model.Vocabulary;
 
 public class VocaListActivity extends AppCompatActivity {
@@ -35,7 +34,7 @@ public class VocaListActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         ActionBarManager.initBackArrowActionbar(this, toolbar, getString(R.string.title_voca_list));
-        setRecyclerView();
+//        setRecyclerView();
     }
 
     private void setRecyclerView() {
@@ -45,8 +44,7 @@ public class VocaListActivity extends AppCompatActivity {
     }
 
     protected List<Vocabulary> getDataFromDb() {
-        VocabularyDBDAO db = new VocabularyDBDAO(this);
-        return db.selectAll();
+        return null;
     }
 
     private void goToMainActivity() {
