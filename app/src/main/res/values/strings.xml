@@ -8,9 +8,6 @@
     <string name="error_limit_4_word">최소 4개의 단어를 등록해주세요.</string>
     <string name="error_limit_1_word">최소 1개의 단어를 등록해주세요.</string>
 
-    <!-- VocaListActivity -->
-    <string name="title_voca_list">단어 리스트</string>
-
     <!-- TestActivity -->
     <string name="msg_correct">맞았습니다.</string>
     <string name="msg_wrong">틀렸습니다.</string>
@@ -25,18 +22,5 @@
     <string name="title_both">모두</string>
 
     <string name="action_confirm">확인</string>
-
-    <string name="msg_first_question">첫 문제입니다.</string>
-    <string name="msg_last_question">마지막 문제입니다.</string>
-    
-    <string name="msg_test_again_wrong_voca">틀린 단어를 다시 푸시겠습니까?</string>
-    <string name="action_yes">예</string>
-    <string name="action_no">아니오</string>
-    <string name="msg_all_solved">모두 맞추셨습니다.</string>
-
-    <string name="action_add_voca">단어 추가</string>
-    <string name="action_edit_voca">단어 편집</string>
-
-    <string name="err_voca_add_or_edit_fail">단어 추가(편집)에 실패했어요.😢</string>
 
 </resources>
