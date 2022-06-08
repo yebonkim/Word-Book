@@ -9,16 +9,16 @@ import androidx.room.Update
 @Dao
 interface WordDao {
     @Insert
-    fun insert(word: Word)
+    suspend fun insert(word: Word): Long
 
     @Update
-    fun update(word: Word)
+    suspend fun update(word: Word): Int
 
     @Query("select * from words")
     fun selectAll(): LiveData<List<Word>>
 
     @Query("select * from words WHERE id = :id")
-    fun findById(id: Int): LiveData<Word>
+    suspend fun findById(id: Int): Word
 
     @Query("select count(*) from words")
     fun getCount(): LiveData<Int>
