@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.wordbook.R
 import com.example.wordbook.StudyActivity
 import com.example.wordbook.TestActivity
-import com.example.wordbook.VocaListActivity
+import com.example.wordbook.vocalist.VocaListActivity
 import com.example.wordbook.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
