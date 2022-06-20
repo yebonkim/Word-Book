@@ -10,4 +10,14 @@ data class Word(
     val english: String,
     val means: String,
     val timestamp: String
-)
+) {
+    companion object {
+        fun make(english: String, means: String): Word {
+            return Word(0, english, means, System.currentTimeMillis().toString())
+        }
+
+        fun make(id: Int, english: String, means: String): Word {
+            return Word(id, english, means, System.currentTimeMillis().toString())
+        }
+    }
+}

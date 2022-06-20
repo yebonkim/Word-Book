@@ -26,6 +26,7 @@ class VocaListActivity : AppCompatActivity() {
 
         mBinding.viewModel = mViewModel
         mBinding.list.layoutManager = LinearLayoutManager(this)
+        mAdapter = VocaListAdapter(::moveToEditVoca)
         mBinding.list.adapter = mAdapter
 
         mViewModel.moveToRegisterVoca.observe(this) {

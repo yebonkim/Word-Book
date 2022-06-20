@@ -1,6 +1,7 @@
 package com.example.wordbook.vocalist
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
@@ -9,8 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.wordbook.R
 import com.example.wordbook.database.Word
 import com.example.wordbook.databinding.ViewholderVocaBinding
+import com.example.wordbook.generated.callback.OnClickListener
 
-class VocaListAdapter : ListAdapter<Word, VocaListAdapter.VocaViewHolder>(VocaDiffCallback()) {
+class VocaListAdapter(val onMoveToEditVoca: (word: Word) -> Unit) : ListAdapter<Word, VocaListAdapter.VocaViewHolder>(VocaDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VocaViewHolder {
         return VocaViewHolder.from(parent)
@@ -18,6 +20,7 @@ class VocaListAdapter : ListAdapter<Word, VocaListAdapter.VocaViewHolder>(VocaDi
 
     override fun onBindViewHolder(holder: VocaViewHolder, position: Int) {
         holder.binding.word = getItem(position)
+        holder.binding.onClick = VocaClickListener(onMoveToEditVoca)
     }
 
     class VocaDiffCallback : DiffUtil.ItemCallback<Word>() {
@@ -45,5 +48,9 @@ class VocaListAdapter : ListAdapter<Word, VocaListAdapter.VocaViewHolder>(VocaDi
                 )
             }
         }
+    }
+
+    class VocaClickListener(val onMoveToEditVoca: (word: Word) -> Unit) {
+        fun onVocaClick(word: Word) = onMoveToEditVoca(word)
     }
 }
