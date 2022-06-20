@@ -25,7 +25,8 @@
         <activity android:name=".StudyActivity" />
         <activity android:name=".TestActivity" />
         <activity android:name=".vocalist.VocaListActivity" />
-        <activity android:name=".EditVocaActivity" />
+        <activity android:name=".edit.EditVocaActivity" />
+        <activity android:name=".register.RegisterVocaActivity" />
     </application>
 
 </manifest>

@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.example.wordbook.vocalist.VocaListViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="20dp"
-            android:onClick="@{() -> viewModel.moveToEditVoca()}"
+            android:onClick="@{() -> viewModel.moveToRegisterVoca()}"
             android:scaleType="centerCrop"
             android:src="@android:drawable/ic_menu_add"
             app:borderWidth="0dp"
