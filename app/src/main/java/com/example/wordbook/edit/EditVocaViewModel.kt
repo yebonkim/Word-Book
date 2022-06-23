@@ -23,10 +23,6 @@ class EditVocaViewModel(application: Application, val mWordId: Int): ViewModel()
     val state: LiveData<EditVocaViewModelState>
         get() = _state
 
-//    private val _word = MutableLiveData<Word?>()
-//    val word: LiveData<Word?>
-//        get() = _word
-
     init {
         load(mWordId)
     }
@@ -47,7 +43,6 @@ class EditVocaViewModel(application: Application, val mWordId: Int): ViewModel()
         viewModelScope.launch {
             val word = repository.findById(wordId)
 
-//            _word.value = word
             _state.value = EditVocaViewModelState.Ready(word)
         }
     }

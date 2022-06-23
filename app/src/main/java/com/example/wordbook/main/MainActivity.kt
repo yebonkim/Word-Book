@@ -1,15 +1,18 @@
 package com.example.wordbook.main
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.wordbook.R
 import com.example.wordbook.StudyActivity
 import com.example.wordbook.TestActivity
-import com.example.wordbook.vocalist.VocaListActivity
 import com.example.wordbook.databinding.ActivityMainBinding
+import com.example.wordbook.vocalist.VocaListActivity
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityMainBinding
@@ -24,13 +27,25 @@ class MainActivity : AppCompatActivity() {
 
         mViewModel.mMoveToStudy.observe(this) {
             if (it) {
-                startActivity(Intent(this, StudyActivity::class.java))
+                lifecycleScope.launch {
+                    if (mViewModel.moveToStudyEnabled()) {
+                        startActivity(Intent(this@MainActivity, StudyActivity::class.java))
+                    } else {
+                        Toast.makeText(this@MainActivity, R.string.error_limit_1_word, Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
 
         mViewModel.mMoveToTest.observe(this) {
             if (it) {
-                startActivity(Intent(this, TestActivity::class.java))
+                lifecycleScope.launch {
+                    if (mViewModel.moveToTestEnabled()) {
+                        startActivity(Intent(this@MainActivity, TestActivity::class.java))
+                    } else {
+                        Toast.makeText(this@MainActivity, R.string.error_limit_4_word, Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
 

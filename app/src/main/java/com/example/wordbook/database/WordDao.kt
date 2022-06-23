@@ -21,5 +21,5 @@ interface WordDao {
     suspend fun findById(id: Int): Word
 
     @Query("select count(*) from words")
-    fun getCount(): LiveData<Int>
+    suspend fun getCount(): Int
 }
