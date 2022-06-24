@@ -22,7 +22,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".StudyActivity" />
+        <activity android:name=".study.StudyActivity" />
         <activity android:name=".test.TestActivity" />
         <activity android:name=".vocalist.VocaListActivity" />
         <activity android:name=".edit.EditVocaActivity" />
