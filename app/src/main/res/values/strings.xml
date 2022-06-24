@@ -9,6 +9,7 @@
     <string name="error_limit_1_word">최소 1개의 단어를 등록해주세요.</string>
 
     <!-- TestActivity -->
+    <string name="msg_none"></string>
     <string name="msg_correct">맞았습니다.</string>
     <string name="msg_wrong">틀렸습니다.</string>
 

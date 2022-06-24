@@ -14,7 +14,7 @@ import com.example.wordbook.register.RegisterVocaActivity
 import com.example.wordbook.util.Constants
 
 class VocaListActivity : AppCompatActivity() {
-    private lateinit var mViewModel : VocaListViewModel
+    private lateinit var mViewModel: VocaListViewModel
     private lateinit var mBinding: ActivityVocaListBinding
     private lateinit var mAdapter: VocaListAdapter
 
@@ -42,7 +42,7 @@ class VocaListActivity : AppCompatActivity() {
 
     private fun moveToEditVoca(word: Word) {
         val intent = Intent(this, EditVocaActivity::class.java)
-        intent.putExtra(Constants.EXTRA_VOCA_ID, word?.id ?: -1)
+        intent.putExtra(Constants.EXTRA_VOCA_ID, word.id)
         startActivity(intent)
     }
 

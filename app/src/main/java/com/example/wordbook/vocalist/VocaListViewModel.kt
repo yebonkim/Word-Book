@@ -15,7 +15,7 @@ class VocaListViewModel(application: Application): AndroidViewModel(application)
     val moveToRegisterVoca: LiveData<Boolean>
         get() = _moveToRegisterVoca
 
-    val vocas = repository.words
+    val vocas = repository.getWordListByLiveData()
 
     fun moveToRegisterVoca() {
         _moveToRegisterVoca.value = true

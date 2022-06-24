@@ -7,7 +7,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class WordRepository(private val database: WordDatabase) {
-    val words: LiveData<List<Word>> = database.wordDao.selectAll()
+    fun getWordListByLiveData(): LiveData<List<Word>> {
+        return database.wordDao.selectAllWithLiveData()
+    }
+
+    suspend fun getWordList(): List<Word> {
+        return withContext(Dispatchers.IO) {
+            database.wordDao.selectAll()
+        }
+    }
 
     suspend fun save(word: Word): Long {
         return withContext(Dispatchers.IO) {

@@ -9,8 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.wordbook.R
 import com.example.wordbook.StudyActivity
-import com.example.wordbook.TestActivity
 import com.example.wordbook.databinding.ActivityMainBinding
+import com.example.wordbook.test.TestActivity
 import com.example.wordbook.vocalist.VocaListActivity
 import kotlinx.coroutines.launch
 
