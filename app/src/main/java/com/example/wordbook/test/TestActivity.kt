@@ -1,16 +1,11 @@
 package com.example.wordbook.test
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.example.wordbook.R
 import com.example.wordbook.databinding.ActivityTestBinding
-import com.example.wordbook.databinding.ActivityVocaListBinding
-import com.example.wordbook.vocalist.VocaListViewModel
-import kotlinx.coroutines.launch
 
 class TestActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityTestBinding

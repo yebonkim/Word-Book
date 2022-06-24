@@ -8,7 +8,6 @@ import com.example.wordbook.repository.WordRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-
 class TestViewModel(application: Application): AndroidViewModel(application) {
     data class TestUnit(val question: Word, val candidates: List<Word>)
 

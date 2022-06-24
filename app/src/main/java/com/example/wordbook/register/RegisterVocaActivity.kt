@@ -1,13 +1,12 @@
 package com.example.wordbook.register
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.wordbook.R
 import com.example.wordbook.database.Word
 import com.example.wordbook.databinding.ActivityEditVocaBinding
-import com.example.wordbook.util.Constants
 
 class RegisterVocaActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityEditVocaBinding

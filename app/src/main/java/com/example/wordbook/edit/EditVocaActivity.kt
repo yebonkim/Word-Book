@@ -1,13 +1,11 @@
 package com.example.wordbook.edit
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.wordbook.R
-import com.example.wordbook.database.Word
 import com.example.wordbook.databinding.ActivityEditVocaBinding
 import com.example.wordbook.util.Constants
 import kotlinx.coroutines.launch

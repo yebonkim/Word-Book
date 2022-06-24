@@ -1,7 +1,6 @@
 package com.example.wordbook.vocalist
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
@@ -10,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.wordbook.R
 import com.example.wordbook.database.Word
 import com.example.wordbook.databinding.ViewholderVocaBinding
-import com.example.wordbook.generated.callback.OnClickListener
 
 class VocaListAdapter(val onMoveToEditVoca: (word: Word) -> Unit) : ListAdapter<Word, VocaListAdapter.VocaViewHolder>(VocaDiffCallback()) {
 
