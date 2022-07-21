@@ -14,7 +14,7 @@
         android:theme="@style/Theme.WordBook"
         tools:targetApi="31">
         <activity
-            android:name=".main.MainActivity"
+            android:name=".BaseActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,11 +22,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".study.StudyActivity" />
-        <activity android:name=".test.TestActivity" />
-        <activity android:name=".vocalist.VocaListActivity" />
-        <activity android:name=".edit.EditVocaActivity" />
-        <activity android:name=".register.RegisterVocaActivity" />
     </application>
 
 </manifest>
