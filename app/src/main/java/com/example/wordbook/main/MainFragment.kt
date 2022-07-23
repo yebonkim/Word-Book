@@ -10,15 +10,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.lifecycleScope
 import com.example.wordbook.BaseActivity
 import com.example.wordbook.R
 import com.example.wordbook.databinding.FragmentMainBinding
 import com.example.wordbook.study.StudyFragment
 import com.example.wordbook.test.TestFragment
 import com.example.wordbook.vocalist.VocaListBaseFragment
-import com.example.wordbook.vocalist.VocaListFragment
-import kotlinx.coroutines.launch
 
 class MainFragment : Fragment() {
 
@@ -40,37 +37,36 @@ class MainFragment : Fragment() {
 
         binding.viewModel = viewModel
 
-        viewModel.mMoveToStudy.observe(viewLifecycleOwner) {
-            if (it) {
-                lifecycleScope.launch {
-                    if (viewModel.moveToStudyEnabled()) {
-                        addStudyFragment()
-                        viewModel.moveToStudyDone()
-                    } else {
-                        Toast.makeText(context, R.string.error_limit_1_word, Toast.LENGTH_SHORT).show()
-                    }
+        viewModel.mStudyMovingState.observe(viewLifecycleOwner) {
+            when (it) {
+                MovingState.IDLE -> {}
+                MovingState.MOVE -> {
+                    addStudyFragment()
+                    viewModel.setStudyMovingStateIdle()
+                }
+                MovingState.FAIL -> {
+                    Toast.makeText(context, R.string.error_limit_1_word, Toast.LENGTH_SHORT).show()
+                    viewModel.setStudyMovingStateIdle()
                 }
             }
         }
 
-        viewModel.mMoveToTest.observe(viewLifecycleOwner) {
-            if (it) {
-                lifecycleScope.launch {
-                    if (viewModel.moveToTestEnabled()) {
-                        addTestFragment()
-                        viewModel.moveToTestDone()
-                    } else {
-                        Toast.makeText(context, R.string.error_limit_4_word, Toast.LENGTH_SHORT).show()
-                    }
+        viewModel.mTestMovingState.observe(viewLifecycleOwner) {
+            when (it) {
+                MovingState.IDLE -> {}
+                MovingState.MOVE -> {
+                    addTestFragment()
+                    viewModel.setTestMovingStateIdle()
+                }
+                MovingState.FAIL -> {
+                    Toast.makeText(context, R.string.error_limit_4_word, Toast.LENGTH_SHORT).show()
+                    viewModel.setTestMovingStateIdle()
                 }
             }
         }
 
-        viewModel.mMoveToVocaList.observe(viewLifecycleOwner) {
-            if (it) {
-                addVocaListFragment()
-                viewModel.moveToVocaListDone()
-            }
+        binding.register.setOnClickListener {
+            addVocaListFragment()
         }
 
         return binding.root

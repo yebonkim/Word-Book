@@ -1,11 +1,16 @@
 package com.example.wordbook.main
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
 import com.example.wordbook.database.getDatabase
 import com.example.wordbook.repository.WordRepository
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+
+
+enum class MovingState {
+    IDLE, MOVE, FAIL
+}
 
 class MainViewModel(application: Application): AndroidViewModel(application) {
     companion object {
@@ -14,57 +19,51 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
     }
     private val repository = WordRepository(getDatabase(application))
 
-    private val _mMoveToStudy = MutableLiveData<Boolean>(false)
-    val mMoveToStudy: LiveData<Boolean>
-        get() = _mMoveToStudy
+    private val _mStudyMovingState = MutableLiveData<MovingState>(MovingState.IDLE)
+    val mStudyMovingState: LiveData<MovingState>
+        get() = _mStudyMovingState
 
-    private val _mMoveToTest = MutableLiveData<Boolean>(false)
-    val mMoveToTest: LiveData<Boolean>
-        get() = _mMoveToTest
-
-    private val _mMoveToVocaList= MutableLiveData<Boolean>(false)
-    val mMoveToVocaList: LiveData<Boolean>
-        get() = _mMoveToVocaList
+    private val _mTestMovingState = MutableLiveData<MovingState>(MovingState.IDLE)
+    val mTestMovingState: LiveData<MovingState>
+        get() = _mTestMovingState
 
     fun moveToStudy() {
-        _mMoveToStudy.value = true
+        viewModelScope.launch {
+            if (moveToStudyEnabled()) {
+                _mStudyMovingState.value = MovingState.MOVE
+            } else {
+                _mStudyMovingState.value = MovingState.FAIL
+            }
+        }
     }
 
-    fun moveToStudyDone() {
-        _mMoveToStudy.value = false
+    fun setStudyMovingStateIdle() {
+        _mStudyMovingState.value = MovingState.IDLE
     }
 
     fun moveToTest() {
-        _mMoveToTest.value = true
+        viewModelScope.launch {
+            if (moveToTestEnabled()) {
+                _mTestMovingState.value = MovingState.MOVE
+            } else {
+                _mTestMovingState.value = MovingState.FAIL
+            }
+        }
     }
 
-    fun moveToTestDone() {
-        _mMoveToTest.value = false
+    fun setTestMovingStateIdle() {
+        _mTestMovingState.value = MovingState.IDLE
     }
 
-    fun moveToVocaList() {
-        _mMoveToVocaList.value = true
-    }
-
-    fun moveToVocaListDone() {
-        _mMoveToVocaList.value = false
-    }
-
-    suspend fun moveToStudyEnabled(): Boolean {
+    private suspend fun moveToStudyEnabled(): Boolean {
         return viewModelScope.async {
             repository.getCounts() >= LIMIT_TO_MOVE_STUDY
         }.await()
     }
 
-    suspend fun moveToTestEnabled(): Boolean {
+    private suspend fun moveToTestEnabled(): Boolean {
         return viewModelScope.async {
             repository.getCounts() >= LIMIT_TO_MOVE_TEST
         }.await()
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-
-        Log.d("Yebon", "onClear main")
     }
 }

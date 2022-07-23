@@ -38,11 +38,8 @@ class VocaListFragment : Fragment() {
         adapter = VocaListAdapter(::moveToEditVoca)
         binding.list.adapter = adapter
 
-        viewModel.moveToRegisterVoca.observe(viewLifecycleOwner) {
-            if (it) {
-                moveToRegisterVoca()
-                viewModel.moveToRegisterVocaDone()
-            }
+        binding.add.setOnClickListener {
+            moveToRegisterVoca()
         }
 
         viewModel.vocas.observe(viewLifecycleOwner) {
